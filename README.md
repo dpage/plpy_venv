@@ -53,8 +53,14 @@ PL/Python function "create_venv"
 
 ### Activate a virtual environment
 
+> **_NOTE:_** 
+> 
+> When a virtual environment is activated, it applies to the current session only. It is not currently 
+> possible to de-activate a virtual environment without closing the connection to the database (which may not actually
+> work if using a connection pooler). You can activate an alternate virtual environment.
+
 ```postgresql
-plpy=# SELECt plpy_venv.activate_venv('myvenv');
+plpy=# SELECT plpy_venv.activate_venv('myvenv');
 activate_venv 
 ---------------
  t
