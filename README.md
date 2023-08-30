@@ -19,7 +19,7 @@ directory on the server, e.g. *\<PGINSTDIR\>\share\extension*
 
 Create the extension in whatever database you want to use virtual environments:
 
-```postgresql
+```sql
 plpy=# CREATE EXTENSION plpy_venv CASCADE;
 NOTICE:  installing required extension "plpython3u"
 CREATE EXTENSION
@@ -29,7 +29,7 @@ CREATE EXTENSION
 
 ### Create a virtual environment
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.create_venv('myvenv');
 create_venv              
 ---------------------------------------
@@ -42,7 +42,7 @@ environments are created in the PostgreSQL data directory, under a new *venvs* d
 
 If you try to create a virtual environment that appears to already exist, an error is thrown:
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.create_venv('myvenv');
 ERROR:  plpy.Error: Virtual environment directory /path/to/postgresql/data/venvs/myvenv already exists.
 CONTEXT:  Traceback (most recent call last):
@@ -59,7 +59,7 @@ PL/Python function "create_venv"
 > possible to de-activate a virtual environment without closing the connection to the database (which may not actually
 > work if using a connection pooler). You can activate an alternate virtual environment.
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.activate_venv('myvenv');
 activate_venv 
 ---------------
@@ -69,7 +69,7 @@ activate_venv
 
 Attempting to activate a virtual environment that doesn't exist will result in an error:
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.activate_venv('does_not_exist');
 ERROR:  plpy.Error: Virtual environment does_not_exist does not exist.
 CONTEXT:  Traceback (most recent call last):
@@ -80,7 +80,7 @@ PL/Python function "activate_venv"
 
 ### Delete a virtual environment
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.delete_venv('myvenv');
  delete_venv 
 -------------
@@ -90,7 +90,7 @@ plpy=# SELECT plpy_venv.delete_venv('myvenv');
 
 An error is thrown if an attempt is made to delete the currently active virtual environment, or one that does not exist:
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.delete_venv('myvenv');
 ERROR:  plpy.Error: Virtual environment myvenv is currently active.
 CONTEXT:  Traceback (most recent call last):
@@ -99,7 +99,7 @@ CONTEXT:  Traceback (most recent call last):
 PL/Python function "delete_venv"
 ```
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.delete_venv('does_not_exist');
 ERROR:  plpy.Error: Virtual environment does_not_exist does not exist.
 CONTEXT:  Traceback (most recent call last):
@@ -110,7 +110,7 @@ PL/Python function "delete_venv"
 
 ### Determine the active virtual environment
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.current_venv();
  current_venv 
 --------------
@@ -120,7 +120,7 @@ plpy=# SELECT plpy_venv.current_venv();
 
 If no virtual environment is currently active, NULL is returned:
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.current_venv();
  current_venv 
 --------------
@@ -130,7 +130,7 @@ plpy=# SELECT plpy_venv.current_venv();
 
 ## Install packages into a virtual environment using PIP
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.pip_install('{"numpy", "pandas"}');
 NOTICE:  Collecting numpy
   Using cached numpy-1.25.2-cp311-cp311-macosx_11_0_arm64.whl (14.0 MB)
@@ -159,7 +159,7 @@ example, *"PackageName"*, *"PackageName==1.2.3"*, *"PackageName>=1.2.0"* and so 
 
 If an attempt is made to install a package that does not exist, an error is thrown:
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.pip_install('{"does_not_exist"}');
 ERROR:  plpy.Error: Installation error 1:
 ERROR: Could not find a version that satisfies the requirement does_not_exist (from versions: none)
@@ -174,7 +174,7 @@ PL/Python function "pip_install"
 
 ## Upgrade packages in a virtual environment using PIP
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.pip_upgrade('{"pip"}');
 NOTICE:  Requirement already satisfied: pip in ./venvs/myvenv/lib/python3.11/site-packages (22.3.1)
 Collecting pip
@@ -196,7 +196,7 @@ Successfully installed pip-23.2.1
 
 ## Uninstall packages into a virtual environment using PIP
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.pip_uninstall('{"numpy", "pandas"}');
 NOTICE:  Found existing installation: numpy 1.25.2
 Uninstalling numpy-1.25.2:
@@ -219,7 +219,7 @@ not.
 
 ## List packages installed in the active Python virtual environment in requirements format
 
-```postgresql
+```sql
 plpy=# SELECT plpy_venv.pip_freeze();
 pip_freeze                                          
 ----------------------------------------------------------------------------------------------
